@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+<hr>
+
+{% block content %}
+<div class="row">
+	<!-- Ponemos offset para centrar el formulario -->
+	<div class="col-sm-6 col-sm-offset-3">
+		
+		{% if titulo %}
+			<h1 class="text-align-center">{{ titulo }}</h1>
+			<br>
+		{% endif %}
+		
+		{% if form %}
+		<form method="POST" action="">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<br>
+		<input class="btn btn-primary" type="submit" value="Enviar" />
+		</form>
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

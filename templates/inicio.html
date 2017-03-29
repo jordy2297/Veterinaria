@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block head_title %}
+	Bienvenidos |
+{% endblock %}
+
+<style>
+    {% block style %}
+		
+		.jumbotron {
+			background-color: #10a75c!important;
+		}
+
+    {% endblock %}
+</style>
+
+{% block jumbotron %}
+
+{% if request.user.is_staff %} <!-- Para superusuarios -->
+	<table class="table">
+		{% for instance in queryset %}
+		<tr>
+			<td>
+				{{  forloop.counter }}<!-- Numeros -->
+			</td>
+			<td>
+				NOMBRE: {{  instance.nombre }}
+			</td>
+			<td>
+				APELLIDO: {{ instance.apellido }}
+			</td>
+			<td>
+				DNI: {{ instance.dni }}
+			</td>
+			<td>
+				TELEFONO: {{ instance.telefono }}
+			</td>
+			<td>
+				EMAIL: {{ instance.email }}
+			</td>
+			<td>
+				Hace {{ instance.timestamp|timesince }}<!-- Filtro para ver hace cuanto tiempo se creo -->
+			</td>
+		</tr>
+		<br/>
+		{% endfor %}
+	</table>
+{% else %}
+
+	<div class="jumbotron">
+	<div class="container">
+
+		<div class='row'>
+			<div class='col-sm-6'>
+
+				<h1 style="color:#792db3">HUELLITAS K&S</h1>
+    			<p style="color:rgba(101, 38, 38, 0.78)">Somos una veterinaria con 10 años de experiencia al cuidado de mascostas, tenemos el firme compromiso de brindar un servicio de calidad .</p>
+    			<p>
+    				<a class="btn btn-lg btn-primary" href="{% url 'registration_register' %}" role="button">Únete &raquo;</a>
+    			</p>
+			</div>
+			<div class='col-sm-6'>
+				<img src="{% static 'img/fondo.jpg' %}" class="img-responsive" />
+			</div>
+
+		</div>
+	
+	</div>
+	</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+{{ titulo }}
+
+<hr>
+<br>
+
+{% block content %}
+
+{% if not request.user.is_staff %} <!-- Para usuarios comunes -->
+	<!-- Dar formato de tabla -->
+	<div class="row">
+		<!-- Colocar el formulario a la derecha -->
+		<!-- Le ponemos a la columna sm para pantallas pequeñas y 3 para que cubran 4 celdas -->
+		<!-- Le ponemos a la columna xs para pantallas muy pequeñas y 12 para el formulario este solo -->
+		<div class="col-sm-3 col-xs-12 pull-right">
+			<!-- Agregamos un titulo al formulario y lead para hacer mas grande el parrafo -->
+
+			{% if not user.is_authenticated %}
+		
+			<p class="lead text-align-center">Recibe notificaiones</p>
+
+			<form method="POST" action="">
+				{% csrf_token %}
+				{{ form|crispy }}
+				<!-- {{ form.as_p }} -->
+				<br>
+				<!-- Dar estilo al boton -->
+				<input class="btn btn-primary" type="submit" value="Suscribirme"/>
+			</form>
+
+			{% else %}
+
+			<p class="lead text-align-center">Mascotas</p>
+			<img src="{% static 'img/cachorros.jpg' %}" class="img-thumbnail" />
+
+			{% endif %}
+			<br>
+		</div>
+	
+		<div class="col-sm-3 pull-right">
+			<p class="lead text-align-center">Sucursales</p>
+			<img src="{% static 'img/sucursales.jpg' %}" class="img-thumbnail" />
+		</div>
+	
+		<div class="col-sm-3 pull-right">
+			<p class="lead text-align-center">Promociones</p>
+			<img src="{% static 'img/promociones.png' %}" class="img-thumbnail" />
+		</div>
+
+		<div class="col-sm-3 pull-right">
+			<p class="lead text-align-center">Campañas</p>  <!-- &amp;  Permite poner un & --> 
+			<img src="{% static 'img/camp.jpg' %}" class="img-thumbnail" />
+		</div>
+
+	</div>
+	<hr>
+
+{% endif %}
+{% endblock %}
